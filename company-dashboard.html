@@ -1,0 +1,2285 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Company / Admin Dashboard | TalentBridge</title>
+
+  <link rel="stylesheet" href="style.css" />
+
+  <style>
+    .dashboard-page {
+      min-height: 100vh;
+      background: #f5f7fb;
+    }
+
+    .dashboard-layout {
+      display: flex;
+      min-height: 100vh;
+    }
+
+    .dashboard-sidebar {
+      width: 260px;
+      background: #111827;
+      color: #fff;
+      padding: 28px 20px;
+      position: fixed;
+      inset: 0 auto 0 0;
+      z-index: 100;
+    }
+
+    .dashboard-brand {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 22px;
+      font-weight: 800;
+      margin-bottom: 45px;
+    }
+
+    .dashboard-brand span {
+      color: #38bdf8;
+    }
+
+    .dashboard-brand {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 8px 10px 20px;
+    }
+
+    .dashboard-brand-mark {
+      display: grid;
+      place-items: center;
+      width: 38px;
+      height: 38px;
+      border-radius: 10px;
+      background: linear-gradient(135deg, #20b8ff, #6870ff);
+      color: white;
+      font-size: 12px;
+      font-weight: 800;
+    }
+
+    .dashboard-brand-text {
+      display: flex;
+      flex-direction: column;
+      line-height: 1.15;
+    }
+
+    .dashboard-brand-text strong {
+      color: white;
+      font-size: 20px;
+      font-weight: 800;
+      letter-spacing: -0.5px;
+    }
+
+    .dashboard-brand-text strong span {
+      color: #4bbdff;
+    }
+
+    .dashboard-brand-text small {
+      margin-top: 5px;
+      color: #8fa2c2;
+      font-size: 9px;
+      font-weight: 600;
+      letter-spacing: 0.5px;
+      text-transform: uppercase;
+    }
+
+    .company-mini-profile {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 15px;
+      border-radius: 14px;
+      background: rgba(255, 255, 255, 0.08);
+      margin-bottom: 30px;
+    }
+
+    .company-avatar {
+      width: 42px;
+      height: 42px;
+      display: grid;
+      place-items: center;
+      border-radius: 50%;
+      background: linear-gradient(135deg, #1d4ed8, #0f172a);
+      font-weight: 800;
+      box-shadow: 0 8px 18px rgba(37, 99, 235, 0.24);
+      overflow: hidden;
+    }
+
+    .company-logo-mark {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 100%;
+      height: 100%;
+      font-size: 12px;
+      letter-spacing: 0.08em;
+      color: #fff;
+      background: linear-gradient(135deg, #1d4ed8, #0f172a);
+      font-weight: 800;
+    }
+
+    .company-mini-profile strong {
+      display: block;
+      font-size: 14px;
+    }
+
+    .company-mini-profile small {
+      color: #cbd5e1;
+      font-size: 12px;
+    }
+
+    .dashboard-nav {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .dashboard-nav a {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      color: #cbd5e1;
+      text-decoration: none;
+      padding: 13px 15px;
+      border-radius: 10px;
+      transition: 0.25s ease;
+      font-size: 14px;
+    }
+
+    .dashboard-nav a:hover,
+    .dashboard-nav a.active {
+      background: #2563eb;
+      color: #fff;
+    }
+
+    .dashboard-nav a.logout-link {
+      margin-top: 25px;
+      color: #fca5a5;
+    }
+
+    .dashboard-main {
+      flex: 1;
+      margin-left: 260px;
+      padding: 28px;
+    }
+
+    .dashboard-topbar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 20px;
+      margin-bottom: 30px;
+    }
+
+    .dashboard-topbar h1 {
+      margin: 0 0 8px;
+      color: #111827;
+      font-size: 30px;
+    }
+
+    .dashboard-topbar p {
+      margin: 0;
+      color: #64748b;
+    }
+
+    .topbar-actions {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .notification-button {
+      width: 42px;
+      height: 42px;
+      border: 1px solid #e2e8f0;
+      border-radius: 50%;
+      background: #fff;
+      cursor: pointer;
+      font-size: 18px;
+    }
+
+    .company-top-avatar {
+      width: 42px;
+      height: 42px;
+      display: grid;
+      place-items: center;
+      background: #dbeafe;
+      color: #1d4ed8;
+      border-radius: 50%;
+      font-weight: 800;
+    }
+
+    .dashboard-section {
+      display: none;
+    }
+
+    .dashboard-section.active {
+      display: block;
+    }
+
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 20px;
+      margin-bottom: 30px;
+    }
+
+    .stat-card {
+      background: #fff;
+      border: 1px solid #e5e7eb;
+      border-radius: 18px;
+      padding: 22px;
+      box-shadow: 0 8px 25px rgba(15, 23, 42, 0.04);
+    }
+
+    .stat-card-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 20px;
+    }
+
+    .stat-icon {
+      width: 42px;
+      height: 42px;
+      display: grid;
+      place-items: center;
+      border-radius: 12px;
+      background: #dbeafe;
+      color: #1d4ed8;
+      font-size: 20px;
+    }
+
+    .stat-card h3 {
+      margin: 0;
+      color: #64748b;
+      font-size: 14px;
+      font-weight: 600;
+    }
+
+    .stat-card strong {
+      color: #111827;
+      font-size: 30px;
+    }
+
+    .dashboard-grid {
+      display: grid;
+      grid-template-columns: 1.5fr 1fr;
+      gap: 25px;
+      margin-bottom: 25px;
+    }
+
+    .dashboard-card {
+      background: #fff;
+      border: 1px solid #e5e7eb;
+      border-radius: 18px;
+      padding: 24px;
+      box-shadow: 0 8px 25px rgba(15, 23, 42, 0.04);
+    }
+
+    .card-heading {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 15px;
+      margin-bottom: 22px;
+    }
+
+    .card-heading h2 {
+      margin: 0;
+      color: #111827;
+      font-size: 20px;
+    }
+
+    .card-heading a {
+      color: #2563eb;
+      font-size: 14px;
+      text-decoration: none;
+      cursor: pointer;
+    }
+
+    .activity-list {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .activity-item {
+      display: flex;
+      align-items: center;
+      gap: 13px;
+      padding-bottom: 16px;
+      border-bottom: 1px solid #f1f5f9;
+    }
+
+    .activity-item:last-child {
+      border-bottom: none;
+      padding-bottom: 0;
+    }
+
+    .activity-icon {
+      width: 38px;
+      height: 38px;
+      display: grid;
+      place-items: center;
+      border-radius: 10px;
+      background: #eff6ff;
+      color: #2563eb;
+    }
+
+    .activity-item strong {
+      display: block;
+      color: #1e293b;
+      font-size: 14px;
+      margin-bottom: 4px;
+    }
+
+    .activity-item small {
+      color: #94a3b8;
+    }
+
+    .quick-actions {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 14px;
+    }
+
+    .quick-action {
+      border: 1px solid #dbeafe;
+      background: #eff6ff;
+      color: #1d4ed8;
+      padding: 18px;
+      border-radius: 13px;
+      text-align: left;
+      cursor: pointer;
+      font-weight: 700;
+      transition: 0.25s ease;
+    }
+
+    .quick-action:hover {
+      background: #dbeafe;
+    }
+
+    .quick-action span {
+      display: block;
+      font-size: 25px;
+      margin-bottom: 8px;
+    }
+
+    .section-card {
+      background: #fff;
+      border: 1px solid #e5e7eb;
+      border-radius: 18px;
+      padding: 25px;
+      margin-bottom: 25px;
+      box-shadow: 0 8px 25px rgba(15, 23, 42, 0.04);
+    }
+
+    .section-title {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 20px;
+      margin-bottom: 25px;
+    }
+
+    .section-title h2 {
+      margin: 0;
+      font-size: 23px;
+      color: #111827;
+    }
+
+    .section-title p {
+      color: #64748b;
+      margin: 7px 0 0;
+    }
+
+    .primary-button,
+    .secondary-button,
+    .danger-button {
+      border: none;
+      border-radius: 10px;
+      padding: 12px 18px;
+      cursor: pointer;
+      font-weight: 700;
+      transition: 0.25s ease;
+    }
+
+    .primary-button {
+      background: #2563eb;
+      color: #fff;
+    }
+
+    .primary-button:hover {
+      background: #1d4ed8;
+    }
+
+    .secondary-button {
+      background: #e2e8f0;
+      color: #334155;
+    }
+
+    .secondary-button:hover {
+      background: #cbd5e1;
+    }
+
+    .danger-button {
+      background: #fee2e2;
+      color: #b91c1c;
+    }
+
+    .danger-button:hover {
+      background: #fecaca;
+    }
+
+    .form-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 20px;
+    }
+
+    .form-group {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .form-group.full-width {
+      grid-column: 1 / -1;
+    }
+
+    .form-group label {
+      color: #334155;
+      font-size: 14px;
+      font-weight: 700;
+    }
+
+    .form-group input,
+    .form-group select,
+    .form-group textarea {
+      width: 100%;
+      box-sizing: border-box;
+      border: 1px solid #cbd5e1;
+      border-radius: 10px;
+      padding: 13px 14px;
+      font: inherit;
+      outline: none;
+      background: #fff;
+      color: #1e293b;
+    }
+
+    .form-group textarea {
+      resize: vertical;
+      min-height: 130px;
+    }
+
+    .form-group input:focus,
+    .form-group select:focus,
+    .form-group textarea:focus {
+      border-color: #2563eb;
+      box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.12);
+    }
+
+    .form-actions {
+      display: flex;
+      justify-content: flex-end;
+      gap: 12px;
+      margin-top: 25px;
+    }
+
+    .table-wrapper {
+      overflow-x: auto;
+    }
+
+    .dashboard-table {
+      width: 100%;
+      border-collapse: collapse;
+      min-width: 750px;
+    }
+
+    .dashboard-table th {
+      text-align: left;
+      padding: 15px;
+      background: #f8fafc;
+      color: #64748b;
+      font-size: 13px;
+      font-weight: 800;
+      white-space: nowrap;
+    }
+
+    .dashboard-table td {
+      padding: 17px 15px;
+      border-bottom: 1px solid #f1f5f9;
+      color: #334155;
+      font-size: 14px;
+      vertical-align: middle;
+    }
+
+    .dashboard-table tr:last-child td {
+      border-bottom: none;
+    }
+
+    .dashboard-table td strong {
+      color: #1e293b;
+    }
+
+    .status-badge {
+      display: inline-flex;
+      align-items: center;
+      padding: 6px 10px;
+      border-radius: 999px;
+      font-size: 12px;
+      font-weight: 800;
+    }
+
+    .status-active,
+    .status-shortlisted,
+    .status-resolved {
+      background: #dcfce7;
+      color: #15803d;
+    }
+
+    .status-pending,
+    .status-review {
+      background: #fef3c7;
+      color: #a16207;
+    }
+
+    .status-rejected,
+    .status-closed {
+      background: #fee2e2;
+      color: #b91c1c;
+    }
+
+    .status-new {
+      background: #dbeafe;
+      color: #1d4ed8;
+    }
+
+    .table-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 7px;
+    }
+
+    .small-button {
+      border: none;
+      border-radius: 7px;
+      padding: 7px 10px;
+      cursor: pointer;
+      font-size: 12px;
+      font-weight: 700;
+    }
+
+    .small-button.blue {
+      background: #dbeafe;
+      color: #1d4ed8;
+    }
+
+    .small-button.green {
+      background: #dcfce7;
+      color: #15803d;
+    }
+
+    .small-button.red {
+      background: #fee2e2;
+      color: #b91c1c;
+    }
+
+    .empty-state {
+      text-align: center;
+      padding: 45px 20px;
+      color: #64748b;
+    }
+
+    .empty-state div {
+      font-size: 42px;
+      margin-bottom: 12px;
+    }
+
+    .profile-grid {
+      display: grid;
+      grid-template-columns: 180px 1fr;
+      gap: 30px;
+      align-items: start;
+    }
+
+    .profile-logo {
+      width: 150px;
+      height: 150px;
+      display: grid;
+      place-items: center;
+      border-radius: 20px;
+      background: #dbeafe;
+      color: #1d4ed8;
+      font-size: 48px;
+      font-weight: 800;
+      margin: auto;
+    }
+
+    .message-card {
+      border: 1px solid #e2e8f0;
+      border-radius: 13px;
+      padding: 18px;
+      margin-bottom: 15px;
+    }
+
+    .message-card:last-child {
+      margin-bottom: 0;
+    }
+
+    .message-header {
+      display: flex;
+      justify-content: space-between;
+      gap: 15px;
+      margin-bottom: 10px;
+    }
+
+    .message-header strong {
+      color: #1e293b;
+    }
+
+    .message-header small {
+      color: #94a3b8;
+    }
+
+    .message-card p {
+      color: #64748b;
+      line-height: 1.7;
+      margin: 0 0 15px;
+    }
+
+    .mobile-menu-button {
+      display: none;
+      border: none;
+      background: #2563eb;
+      color: #fff;
+      padding: 10px 13px;
+      border-radius: 9px;
+      cursor: pointer;
+    }
+
+    .toast-message {
+      position: fixed;
+      right: 25px;
+      bottom: 25px;
+      z-index: 999;
+      background: #111827;
+      color: #fff;
+      padding: 14px 20px;
+      border-radius: 10px;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+      display: none;
+    }
+
+    .toast-message.show {
+      display: block;
+    }
+
+    @media (max-width: 1100px) {
+      .stats-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+
+      .dashboard-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    @media (max-width: 800px) {
+      .dashboard-sidebar {
+        transform: translateX(-100%);
+        transition: 0.3s ease;
+      }
+
+      .dashboard-sidebar.open {
+        transform: translateX(0);
+      }
+
+      .dashboard-main {
+        margin-left: 0;
+        padding: 20px;
+      }
+
+      .mobile-menu-button {
+        display: inline-block;
+      }
+
+      .dashboard-topbar {
+        align-items: flex-start;
+      }
+
+      .dashboard-topbar h1 {
+        font-size: 24px;
+      }
+
+      .form-grid,
+      .profile-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .profile-logo {
+        margin: 0;
+      }
+    }
+
+    @media (max-width: 550px) {
+      .stats-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .dashboard-topbar {
+        flex-direction: column;
+      }
+
+      .topbar-actions {
+        width: 100%;
+        justify-content: space-between;
+      }
+
+      .section-title {
+        align-items: flex-start;
+        flex-direction: column;
+      }
+
+      .quick-actions {
+        grid-template-columns: 1fr;
+      }
+
+      .dashboard-card,
+      .section-card {
+        padding: 18px;
+      }
+    }
+  </style>
+</head>
+
+<body class="dashboard-page">
+
+  <div class="dashboard-layout">
+
+    <!-- Sidebar -->
+    <aside class="dashboard-sidebar" id="dashboardSidebar">
+      <div class="dashboard-brand">
+        <div class="dashboard-brand-mark">SI</div>
+
+        <div class="dashboard-brand-text">
+            <strong>Talent<span>Bridge</span></strong>
+            <small>by Saeum Innovations</small>
+        </div>
+      </div>
+
+      <div class="company-mini-profile">
+        <div class="company-avatar" id="sidebarCompanyAvatar">
+          <span class="company-logo-mark">SI</span>
+        </div>
+        <div>
+          <strong id="sidebarCompanyName">Saeum Innovations</strong>
+          <small>Company / Admin Account</small>
+        </div>
+      </div>
+
+      <nav class="dashboard-nav">
+        <a href="#" class="dashboard-nav-link active" data-section="overview">
+          📊 Dashboard
+        </a>
+
+        <a href="#" class="dashboard-nav-link" data-section="jobs">
+          💼 My Jobs
+        </a>
+
+        <a href="#" class="dashboard-nav-link" data-section="academic-records">🎓 Academic Records</a>
+        <a href="#" class="dashboard-nav-link" data-section="resume-matching">🤖 Resume Matching</a>
+
+        <a href="#" class="dashboard-nav-link" data-section="applications">
+          📄 Applications
+        </a>
+
+        <a href="#" class="dashboard-nav-link" data-section="messages">
+          💬 Contact Messages
+        </a>
+
+        <a href="#" class="dashboard-nav-link" data-section="notices">
+          📢 Company Notice
+        </a>
+
+        <a href="#" class="dashboard-nav-link" data-section="profile">
+          🏢 Company Profile
+        </a>
+
+        <a href="index.html" class="logout-link" id="logoutButton">
+          ↪ Logout
+        </a>
+      </nav>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="dashboard-main">
+
+      <!-- Topbar -->
+      <header class="dashboard-topbar">
+        <div>
+          <button class="mobile-menu-button" id="mobileMenuButton">
+            ☰
+          </button>
+          <h1 id="pageHeading">Company Dashboard</h1>
+          <p id="pageSubheading">
+            Manage your jobs, applications, and company profile.
+          </p>
+        </div>
+
+        <div class="topbar-actions">
+          <button class="notification-button" title="Notifications">
+            🔔
+          </button>
+          <div class="company-top-avatar" id="topCompanyAvatar">
+            <span class="company-logo-mark">SI</span>
+          </div>
+        </div>
+      </header>
+
+      <!-- Overview Section -->
+      <section class="dashboard-section active" id="overview">
+
+        <div class="stats-grid">
+          <div class="stat-card">
+            <div class="stat-card-header">
+              <h3>Active Jobs</h3>
+              <div class="stat-icon">💼</div>
+            </div>
+            <strong id="activeJobCount">0</strong>
+          </div>
+
+          <div class="stat-card">
+            <div class="stat-card-header">
+              <h3>Total Applications</h3>
+              <div class="stat-icon">📄</div>
+            </div>
+            <strong id="applicationCount">0</strong>
+          </div>
+
+          <div class="stat-card">
+            <div class="stat-card-header">
+              <h3>Shortlisted Students</h3>
+              <div class="stat-icon">⭐</div>
+            </div>
+            <strong id="shortlistedCount">0</strong>
+          </div>
+
+          <div class="stat-card">
+            <div class="stat-card-header">
+              <h3>Unread Messages</h3>
+              <div class="stat-icon">💬</div>
+            </div>
+            <strong id="unreadMessageCount">0</strong>
+          </div>
+        </div>
+
+        <div class="dashboard-grid">
+
+          <div class="dashboard-card">
+            <div class="card-heading">
+              <h2>Recent Activity</h2>
+              <a data-section-link="applications">View all</a>
+            </div>
+
+            <div class="activity-list" id="recentActivityList">
+              <!-- Activities inserted by JavaScript -->
+            </div>
+          </div>
+
+          <div class="dashboard-card">
+            <div class="card-heading">
+              <h2>Quick Actions</h2>
+            </div>
+
+            <div class="quick-actions">
+              <button class="quick-action" data-section-link="jobs">
+                <span>➕</span>
+                Post Job
+              </button>
+
+              <button class="quick-action" data-section-link="applications">
+                <span>📄</span>
+                Review Applications
+              </button>
+
+              <button class="quick-action" data-section-link="profile">
+                <span>🏢</span>
+                Edit Company Profile
+              </button>
+
+              <button class="quick-action" data-section-link="messages">
+                <span>💬</span>
+                View Messages
+              </button>
+            </div>
+          </div>
+
+        </div>
+
+        <div class="dashboard-card">
+          <div class="card-heading">
+            <h2>Latest Job Posts</h2>
+            <a data-section-link="jobs">Manage jobs</a>
+          </div>
+
+          <div class="table-wrapper">
+            <table class="dashboard-table">
+              <thead>
+                <tr>
+                  <th>Position</th>
+                  <th>Location</th>
+                  <th>Type</th>
+                  <th>Applications</th>
+                  <th>Status</th>
+                </tr>
+              </thead>
+              <tbody id="latestJobTable">
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+      </section>
+
+      <!-- Jobs Section -->
+      <section class="dashboard-section" id="jobs">
+
+        <div class="section-title">
+          <div>
+            <h2>Manage Jobs</h2>
+            <p>Create and manage job opportunities.</p>
+          </div>
+
+          <button class="primary-button" id="showJobFormButton">
+            + Post Job
+          </button>
+        </div>
+
+        <div class="section-card" id="jobFormCard" style="display: none;">
+          <div class="card-heading">
+            <h2>Post a New Job</h2>
+          </div>
+
+          <form id="jobForm">
+            <div class="form-grid">
+              <div class="form-group">
+                <label for="jobTitle">Job Title</label>
+                <input
+                  type="text"
+                  id="jobTitle"
+                  placeholder="e.g. Frontend Developer"
+                  required
+                />
+              </div>
+
+              <div class="form-group">
+                <label for="jobDepartment">Department</label>
+                <input
+                  type="text"
+                  id="jobDepartment"
+                  placeholder="e.g. Engineering"
+                  required
+                />
+              </div>
+
+              <div class="form-group">
+                <label for="jobLocation">Location</label>
+                <input
+                  type="text"
+                  id="jobLocation"
+                  placeholder="e.g. Remote or New York"
+                  required
+                />
+              </div>
+
+              <div class="form-group">
+                <label for="jobType">Job Type</label>
+                <select id="jobType" required>
+                  <option value="">Select type</option>
+                  <option value="Remote">Remote</option>
+                  <option value="On-site">On-site</option>
+                  <option value="Hybrid">Hybrid</option>
+                </select>
+              </div>
+
+              <div class="form-group">
+                <label for="jobDuration">Duration</label>
+                <input
+                  type="text"
+                  id="jobDuration"
+                  placeholder="e.g. 3 months"
+                  required
+                />
+              </div>
+
+              <div class="form-group">
+                <label for="jobStipend">Stipend</label>
+                <input
+                  type="text"
+                  id="jobStipend"
+                  placeholder="e.g. $500/month"
+                />
+              </div>
+
+              <div class="form-group full-width">
+                <label for="jobSkills">Required Skills</label>
+                <input
+                  type="text"
+                  id="jobSkills"
+                  placeholder="e.g. HTML, CSS, JavaScript"
+                  required
+                />
+              </div>
+
+              <div class="form-group full-width">
+                <label for="jobDescription">Description</label>
+                <textarea
+                  id="jobDescription"
+                  placeholder="Describe the job opportunity..."
+                  required
+                ></textarea>
+              </div>
+            </div>
+
+            <div class="form-actions">
+              <button
+                type="button"
+                class="secondary-button"
+                id="cancelJobButton"
+              >
+                Cancel
+              </button>
+
+              <button type="submit" class="primary-button">
+                Publish Job
+              </button>
+            </div>
+          </form>
+        </div>
+
+        <div class="section-card">
+          <div class="card-heading">
+            <h2>My Job Posts</h2>
+          </div>
+
+          <div class="table-wrapper">
+            <table class="dashboard-table">
+              <thead>
+                <tr>
+                  <th>Position</th>
+                  <th>Department</th>
+                  <th>Location</th>
+                  <th>Applications</th>
+                  <th>Status</th>
+                  <th>Actions</th>
+                </tr>
+              </thead>
+              <tbody id="jobTableBody">
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+      </section>
+
+
+      <!-- Resume Matching Section -->
+      <section class="dashboard-section" id="resume-matching">
+        <div class="section-title">
+          <div><h2>AI Resume Matching</h2><p>Select a job to compare student profiles and resume information with its required skills.</p></div>
+        </div>
+        <div class="section-card">
+          <div class="record-filters" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:12px;margin-bottom:18px;">
+            <select id="matchJobFilter"><option value="">Select a job</option></select>
+            <select id="matchCollegeFilter"><option value="">All Colleges</option></select>
+            <select id="matchDepartmentFilter"><option value="">All Departments</option></select>
+            <input id="matchMinimumScore" type="number" min="0" max="100" placeholder="Minimum match %">
+          </div>
+          <div id="matchJobSummary" style="margin-bottom:16px;color:#475569;"></div>
+          <div class="table-wrapper">
+            <table class="dashboard-table">
+              <thead><tr><th>Student</th><th>Job</th><th>College</th><th>Department</th><th>Match</th><th>Matching Skills</th><th>Missing Skills</th><th>Action</th></tr></thead>
+              <tbody id="resumeMatchTableBody"><tr><td colspan="8" style="text-align:center;padding:28px;">Select a job to view resume matches.</td></tr></tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      <!-- Academic Records Section -->
+      <section class="dashboard-section" id="academic-records">
+        <div class="section-title">
+          <div><h2>Student Academic Records</h2><p>View verified student performance in a compact company-ready format.</p></div>
+        </div>
+        <div class="section-card">
+          <div class="record-filters" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:12px;margin-bottom:18px;">
+            <select id="adminCollegeFilter"><option value="">All Colleges</option></select>
+            <select id="adminDepartmentFilter"><option value="">All Departments</option></select>
+            <select id="adminYearFilter"><option value="">All Academic Years</option></select>
+            
+            <input id="adminStudentSearch" type="search" placeholder="Search student or email">
+          </div>
+          <div class="table-wrapper">
+            <table class="dashboard-table">
+              <thead><tr><th>Student</th><th>College</th><th>Department</th><th>Academic Years</th><th>Overall Performance</th><th>Total Semesters</th><th>Total Subjects</th></tr></thead>
+              <tbody id="adminAcademicTableBody"></tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      <!-- Applications Section -->
+      <section class="dashboard-section" id="applications">
+
+        <div class="section-title">
+          <div>
+            <h2>Student Applications</h2>
+            <p>Review students who applied to your jobs.</p>
+          </div>
+        </div>
+
+        <div class="section-card">
+          <div class="table-wrapper">
+            <table class="dashboard-table">
+              <thead>
+                <tr>
+                  <th>Student</th>
+                  <th>Email</th>
+                  <th>Job</th>
+                  <th>Applied Date</th>
+                  <th>Status</th>
+                  <th>Actions</th>
+                </tr>
+              </thead>
+              <tbody id="applicationsTableBody">
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+      </section>
+
+      <!-- Messages Section -->
+      <section class="dashboard-section" id="notices">
+
+        <div class="section-title">
+          <div>
+            <h2>Company Notice</h2>
+            <p>Publish an announcement that will appear on the public website.</p>
+          </div>
+        </div>
+
+        <div class="section-card">
+          <form id="noticeForm">
+            <div class="form-grid">
+              <div class="form-group full-width">
+                <label for="noticeTitle">Notice Title</label>
+                <input type="text" id="noticeTitle" placeholder="Important update" required />
+              </div>
+
+              <div class="form-group full-width">
+                <label for="noticeBody">Notice Message</label>
+                <textarea id="noticeBody" rows="6" placeholder="Write the announcement here..." required></textarea>
+              </div>
+            </div>
+
+            <div class="form-actions">
+              <button type="submit" class="primary-button">Publish Notice</button>
+              <button type="button" class="danger-button" id="clearNoticeButton">Remove Notice</button>
+            </div>
+          </form>
+        </div>
+
+      </section>
+
+      <!-- Messages Section -->
+      <section class="dashboard-section" id="messages">
+
+        <div class="section-title">
+          <div>
+            <h2>Contact Messages</h2>
+            <p>Messages submitted through the contact-us form.</p>
+          </div>
+        </div>
+
+        <div class="section-card">
+          <div class="form-actions" style="justify-content: flex-end; margin-bottom: 18px;">
+            <button type="button" class="danger-button" id="clearMessagesButton">Clear All Messages</button>
+          </div>
+          <div id="messagesContainer">
+          </div>
+        </div>
+
+      </section>
+
+      <!-- Company Profile Section -->
+      <section class="dashboard-section" id="profile">
+
+        <div class="section-title">
+          <div>
+            <h2>Company Profile</h2>
+            <p>Update your company information.</p>
+          </div>
+        </div>
+
+        <div class="section-card">
+          <form id="companyProfileForm">
+            <div class="profile-grid">
+              <div>
+                <div class="profile-logo" id="profileLogo">
+                  <span class="company-logo-mark">SI</span>
+                </div>
+              </div>
+
+              <div class="form-grid">
+                <div class="form-group">
+                  <label for="companyName">Company Name</label>
+                  <input
+                    type="text"
+                    id="companyName"
+                    value="Saeum Innovations"
+                    required
+                  />
+                </div>
+
+                <div class="form-group">
+                  <label for="companyEmail">Company Email</label>
+                  <input
+                    type="email"
+                    id="companyEmail"
+                    value="hr@saeum.com"
+                    required
+                  />
+                </div>
+
+                <div class="form-group">
+                  <label for="companyWebsite">Website</label>
+                  <input
+                    type="url"
+                    id="companyWebsite"
+                    placeholder="https://example.com"
+                  />
+                </div>
+
+                <div class="form-group">
+                  <label for="companyIndustry">Industry</label>
+                  <input
+                    type="text"
+                    id="companyIndustry"
+                    value="Technology"
+                  />
+                </div>
+
+                <div class="form-group full-width">
+                  <label for="companyLocation">Location</label>
+                  <input
+                    type="text"
+                    id="companyLocation"
+                    value="New York, USA"
+                  />
+                </div>
+
+                <div class="form-group full-width">
+                  <label for="companyDescription">Company Description</label>
+                  <textarea id="companyDescription">We build innovative digital products and provide meaningful job opportunities for students.</textarea>
+                </div>
+              </div>
+            </div>
+
+            <div class="form-actions">
+              <button type="submit" class="primary-button">
+                Save Profile
+              </button>
+            </div>
+          </form>
+        </div>
+
+      </section>
+
+    </main>
+  </div>
+
+  <div class="toast-message" id="toastMessage"></div>
+
+  <script>
+    const defaultJobs = [
+      {
+        id: 1,
+        title: "Frontend Developer Intern",
+        department: "Engineering",
+        location: "Remote",
+        type: "Remote",
+        duration: "3 months",
+        stipend: "$500/month",
+        skills: "HTML, CSS, JavaScript",
+        description: "Work with our engineering team to build responsive web applications.",
+        applications: 8,
+        status: "Active"
+      },
+      {
+        id: 2,
+        title: "Marketing Intern",
+        department: "Marketing",
+        location: "New York",
+        type: "On-site",
+        duration: "2 months",
+        stipend: "$400/month",
+        skills: "Communication, Social Media",
+        description: "Support marketing campaigns and social media activities.",
+        applications: 5,
+        status: "Active"
+      }
+    ];
+
+    const defaultApplications = [];
+
+    const defaultMessages = [];
+
+    function normalizeNotices(value) {
+      if (Array.isArray(value)) {
+        return value.filter(notice => notice && notice.title && notice.body);
+      }
+
+      if (value && value.title && value.body) {
+        return [value];
+      }
+
+      return [];
+    }
+
+    const savedNotice = JSON.parse(localStorage.getItem("companyNotice") || "null");
+    let companyNotice = normalizeNotices(savedNotice);
+
+    let jobs =
+      JSON.parse(localStorage.getItem("companyJobs")) ||
+      defaultJobs;
+
+    const seededApplicationEmails = new Set([
+      "alex@example.com",
+      "maya@example.com",
+      "daniel@example.com"
+    ]);
+
+    const seededApplicationNames = new Set([
+      "Alex Johnson",
+      "Maya Smith",
+      "Daniel Brown"
+    ]);
+
+    const seededMessageEmails = new Set([
+      "sarah@example.com",
+      "james@example.com"
+    ]);
+
+    const seededMessageNames = new Set([
+      "Sarah Wilson",
+      "James Lee"
+    ]);
+
+    function removeSeededEntries(items, isMessage = false) {
+      const emailSet = isMessage ? seededMessageEmails : seededApplicationEmails;
+      const nameSet = isMessage ? seededMessageNames : seededApplicationNames;
+
+      return (Array.isArray(items) ? items : []).filter(item => {
+        const name = item?.name || item?.student || "";
+        const email = item?.email || "";
+
+        return !emailSet.has(email) && !nameSet.has(name);
+      });
+    }
+
+    let applications = removeSeededEntries(
+      JSON.parse(localStorage.getItem("companyApplications"))
+    );
+
+    if (!applications.length && !localStorage.getItem("companyApplications")) {
+      applications = [...defaultApplications];
+    }
+
+    if (
+      JSON.parse(localStorage.getItem("companyApplications") || "[]").length !==
+      applications.length
+    ) {
+      localStorage.setItem("companyApplications", JSON.stringify(applications));
+    }
+
+    // Contact form submissions are saved as talentBridgeContacts on the landing page.
+    // Merge them with the company inbox so every submitted query appears here.
+    const savedCompanyMessages = JSON.parse(localStorage.getItem("companyMessages") || "[]");
+    const savedContactMessages = JSON.parse(localStorage.getItem("talentBridgeContacts") || "[]");
+    const mergedMessages = [...savedCompanyMessages, ...savedContactMessages].filter((item, index, arr) =>
+      item && (item.id == null || arr.findIndex(x => x && x.id === item.id) === index)
+    );
+    let messages = removeSeededEntries(mergedMessages, true);
+    if (!messages.length && !savedCompanyMessages.length && !savedContactMessages.length) {
+      messages = [...defaultMessages];
+    }
+    localStorage.setItem("companyMessages", JSON.stringify(messages));
+
+    const defaultCompanyProfile = {
+      name: "Saeum Innovations",
+      email: "hr@saeum.com",
+      website: "",
+      industry: "Technology",
+      location: "New York, USA",
+      description:
+        "We build innovative digital products and provide meaningful job opportunities for students."
+    };
+
+    const savedCompanyProfile = JSON.parse(
+      localStorage.getItem("companyProfile") || "null"
+    );
+
+    let companyProfile = {
+      ...defaultCompanyProfile,
+      ...(savedCompanyProfile || {}),
+      name: "Saeum Innovations",
+      email: "hr@saeum.com"
+    };
+
+    localStorage.setItem("companyProfile", JSON.stringify(companyProfile));
+
+    const sections = document.querySelectorAll(".dashboard-section");
+    const navLinks = document.querySelectorAll(".dashboard-nav-link");
+
+    function saveData() {
+      localStorage.setItem("companyJobs", JSON.stringify(jobs));
+      localStorage.setItem("companyApplications", JSON.stringify(applications));
+      localStorage.setItem("companyMessages", JSON.stringify(messages));
+      localStorage.setItem("companyNotice", JSON.stringify(companyNotice));
+      localStorage.setItem("companyProfile", JSON.stringify(companyProfile));
+    }
+
+    function showToast(message) {
+      const toast = document.getElementById("toastMessage");
+      toast.textContent = message;
+      toast.classList.add("show");
+
+      setTimeout(() => {
+        toast.classList.remove("show");
+      }, 2500);
+    }
+
+    function syncContactMessages() {
+      const contactMessages = JSON.parse(localStorage.getItem("talentBridgeContacts") || "[]");
+      const currentMessages = JSON.parse(localStorage.getItem("companyMessages") || "[]");
+      const merged = [...currentMessages, ...contactMessages].filter((item, index, arr) =>
+        item && (item.id == null || arr.findIndex(x => x && x.id === item.id) === index)
+      );
+      messages = removeSeededEntries(merged, true);
+      localStorage.setItem("companyMessages", JSON.stringify(messages));
+      renderMessages();
+      renderStats();
+    }
+
+    function showSection(sectionId) {
+      if (sectionId === "messages") {
+        syncContactMessages();
+      }
+      sections.forEach(section => {
+        section.classList.toggle("active", section.id === sectionId);
+      });
+
+      navLinks.forEach(link => {
+        link.classList.toggle(
+          "active",
+          link.dataset.section === sectionId
+        );
+      });
+
+      const headings = {
+        overview: [
+          "Company Dashboard",
+          "Manage your jobs, applications, and company profile."
+        ],
+        jobs: [
+          "My Jobs",
+          "Create and manage job opportunities."
+        ],
+        applications: [
+          "Student Applications",
+          "Review and manage student applications."
+        ],
+        messages: [
+          "Contact Messages",
+          "Read messages submitted through the contact-us form."
+        ],
+        notices: [
+          "Company Notice",
+          "Publish announcements on the public website."
+        ],
+        profile: [
+          "Company Profile",
+          "Update your company information."
+        ]
+      };
+
+      document.getElementById("pageHeading").textContent =
+        headings[sectionId][0];
+
+      document.getElementById("pageSubheading").textContent =
+        headings[sectionId][1];
+
+      document
+        .getElementById("dashboardSidebar")
+        .classList.remove("open");
+
+      window.scrollTo({
+        top: 0,
+        behavior: "smooth"
+      });
+    }
+
+    navLinks.forEach(link => {
+      link.addEventListener("click", event => {
+        event.preventDefault();
+        showSection(link.dataset.section);
+      });
+    });
+
+    document.querySelectorAll("[data-section-link]").forEach(link => {
+      link.addEventListener("click", () => {
+        showSection(link.dataset.sectionLink);
+      });
+    });
+
+    document
+      .getElementById("mobileMenuButton")
+      .addEventListener("click", () => {
+        document
+          .getElementById("dashboardSidebar")
+          .classList.toggle("open");
+      });
+
+    function getStatusClass(status) {
+      return "status-" + status.toLowerCase().replace(/\s+/g, "-");
+    }
+
+    function renderStats() {
+      const activeJobs = jobs.filter(
+        job => job.status === "Active"
+      ).length;
+
+      const shortlistedApplications = applications.filter(
+        application => application.status === "Shortlisted"
+      ).length;
+
+      const unreadMessages = messages.filter(
+        message => message.status === "New"
+      ).length;
+
+      document.getElementById("activeJobCount").textContent =
+        activeJobs;
+
+      document.getElementById("applicationCount").textContent =
+        applications.length;
+
+      document.getElementById("shortlistedCount").textContent =
+        shortlistedApplications;
+
+      document.getElementById("unreadMessageCount").textContent =
+        unreadMessages;
+    }
+
+    function renderRecentActivity() {
+      const activityList =
+        document.getElementById("recentActivityList");
+
+      const activities = [
+        ...applications.slice(-3).map(application => ({
+          icon: "📄",
+          title: `${application.student} applied for ${application.job}`,
+          date: application.date
+        })),
+        ...messages.slice(-2).map(message => ({
+          icon: "💬",
+          title: `New message from ${message.name}`,
+          date: message.date
+        }))
+      ].slice(-5).reverse();
+
+      if (!activities.length) {
+        activityList.innerHTML = `
+          <div class="empty-state">
+            <div>📭</div>
+            No recent activity.
+          </div>
+        `;
+        return;
+      }
+
+      activityList.innerHTML = activities
+        .map(activity => `
+          <div class="activity-item">
+            <div class="activity-icon">${activity.icon}</div>
+            <div>
+              <strong>${activity.title}</strong>
+              <small>${activity.date}</small>
+            </div>
+          </div>
+        `)
+        .join("");
+    }
+
+    function renderLatestJobs() {
+      const table = document.getElementById("latestJobTable");
+
+      if (!jobs.length) {
+        table.innerHTML = `
+          <tr>
+            <td colspan="5">
+              <div class="empty-state">
+                <div>💼</div>
+                No jobs posted yet.
+              </div>
+            </td>
+          </tr>
+        `;
+        return;
+      }
+
+      table.innerHTML = jobs
+        .slice(0, 5)
+        .map(job => `
+          <tr>
+            <td><strong>${job.title}</strong></td>
+            <td>${job.location}</td>
+            <td>${job.type}</td>
+            <td>${job.applications || 0}</td>
+            <td>
+              <span class="status-badge ${getStatusClass(job.status)}">
+                ${job.status}
+              </span>
+            </td>
+          </tr>
+        `)
+        .join("");
+    }
+
+    function renderJobs() {
+      const table = document.getElementById("jobTableBody");
+
+      if (!jobs.length) {
+        table.innerHTML = `
+          <tr>
+            <td colspan="6">
+              <div class="empty-state">
+                <div>💼</div>
+                No job posts found.
+              </div>
+            </td>
+          </tr>
+        `;
+        return;
+      }
+
+      table.innerHTML = jobs
+        .map(job => `
+          <tr>
+            <td><strong>${job.title}</strong></td>
+            <td>${job.department}</td>
+            <td>${job.location}</td>
+            <td>${job.applications || 0}</td>
+            <td>
+              <span class="status-badge ${getStatusClass(job.status)}">
+                ${job.status}
+              </span>
+            </td>
+            <td>
+              <div class="table-actions">
+                <button
+                  class="small-button blue"
+                  onclick="editJob(${job.id})"
+                >
+                  Edit
+                </button>
+
+                <button
+                  class="small-button blue"
+                  onclick="toggleJobStatus(${job.id})"
+                >
+                  ${job.status === "Active" ? "Close" : "Activate"}
+                </button>
+
+                <button
+                  class="small-button red"
+                  onclick="deleteJob(${job.id})"
+                >
+                  Delete
+                </button>
+              </div>
+            </td>
+          </tr>
+        `)
+        .join("");
+    }
+
+    function renderApplications() {
+      const table = document.getElementById("applicationsTableBody");
+
+      if (!applications.length) {
+        table.innerHTML = `
+          <tr>
+            <td colspan="6">
+              <div class="empty-state">
+                <div>📄</div>
+                No applications received yet.
+              </div>
+            </td>
+          </tr>
+        `;
+        return;
+      }
+
+      table.innerHTML = applications
+        .map(application => `
+          <tr>
+            <td><strong>${application.student}</strong></td>
+            <td>${application.email}</td>
+            <td>${application.job}</td>
+            <td>${application.date}</td>
+            <td>
+              <span class="status-badge ${getStatusClass(application.status || "Pending")}">
+                ${application.status || "Pending"}
+              </span>
+            </td>
+            <td>
+              <div class="table-actions">
+                <button
+                  class="small-button green"
+                  onclick="updateApplicationStatus(${application.id}, 'Shortlisted')"
+                >
+                  Shortlist
+                </button>
+
+                <button
+                  class="small-button red"
+                  onclick="updateApplicationStatus(${application.id}, 'Rejected')"
+                >
+                  Reject
+                </button>
+              </div>
+            </td>
+          </tr>
+        `)
+        .join("");
+    }
+
+    function renderMessages() {
+      const container =
+        document.getElementById("messagesContainer");
+
+      if (!messages.length) {
+        container.innerHTML = `
+          <div class="empty-state">
+            <div>💬</div>
+            No contact messages found.
+          </div>
+        `;
+        return;
+      }
+
+      container.innerHTML = messages
+        .map(message => `
+          <div class="message-card">
+            <div class="message-header">
+              <div>
+                <strong>${message.name}</strong>
+                <small> — ${message.email}</small>
+              </div>
+
+              <span class="status-badge ${getStatusClass(message.status)}">
+                ${message.status}
+              </span>
+            </div>
+
+            <p>
+              <strong>Subject:</strong> ${message.subject}
+            </p>
+
+            <p>${message.message}</p>
+
+            <div class="table-actions">
+              <small>${message.date}</small>
+
+              ${
+                message.status === "New"
+                  ? `
+                    <button
+                      class="small-button green"
+                      onclick="resolveMessage(${message.id})"
+                    >
+                      Mark as Resolved
+                    </button>
+                  `
+                  : ""
+              }
+            </div>
+          </div>
+        `)
+        .join("");
+    }
+
+    function renderNoticeForm() {
+      const latestNotice = companyNotice[companyNotice.length - 1] || {};
+      document.getElementById("noticeTitle").value = latestNotice.title || "";
+      document.getElementById("noticeBody").value = latestNotice.body || "";
+    }
+
+    function renderCompanyProfile() {
+      document.getElementById("companyName").value =
+        companyProfile.name;
+
+      document.getElementById("companyEmail").value =
+        companyProfile.email;
+
+      document.getElementById("companyWebsite").value =
+        companyProfile.website;
+
+      document.getElementById("companyIndustry").value =
+        companyProfile.industry;
+
+      document.getElementById("companyLocation").value =
+        companyProfile.location;
+
+      document.getElementById("companyDescription").value =
+        companyProfile.description;
+
+      updateCompanyBranding();
+    }
+
+    function updateCompanyBranding() {
+      const name = companyProfile.name || "Saeum Innovations";
+      const initials = name
+        .split(/\s+/)
+        .filter(Boolean)
+        .slice(0, 2)
+        .map(word => word.charAt(0).toUpperCase())
+        .join("") || "SI";
+
+      document.getElementById("sidebarCompanyName").textContent =
+        name;
+
+      document.getElementById("sidebarCompanyAvatar").innerHTML =
+        `<span class="company-logo-mark">${initials}</span>`;
+
+      document.getElementById("topCompanyAvatar").innerHTML =
+        `<span class="company-logo-mark">${initials}</span>`;
+
+      document.getElementById("profileLogo").innerHTML =
+        `<span class="company-logo-mark">${initials}</span>`;
+    }
+
+    let editingJobId = null;
+
+    function resetJobForm() {
+      editingJobId = null;
+      document.getElementById("jobForm").reset();
+      document.querySelector("#jobFormCard .card-heading h2").textContent = "Post a New Job";
+      document.querySelector("#jobForm button[type=submit]").textContent = "Publish Job";
+      document.getElementById("jobFormCard").style.display = "none";
+    }
+
+    function editJob(id) {
+      const job = jobs.find(item => item.id === id);
+      if (!job) return;
+
+      editingJobId = id;
+
+      document.getElementById("jobTitle").value = job.title || "";
+      document.getElementById("jobDepartment").value = job.department || "";
+      document.getElementById("jobLocation").value = job.location || "";
+      document.getElementById("jobType").value = job.type || "";
+      document.getElementById("jobDuration").value = job.duration || "";
+      document.getElementById("jobStipend").value = job.stipend || "";
+      document.getElementById("jobSkills").value = job.skills || "";
+      document.getElementById("jobDescription").value = job.description || "";
+
+      document.querySelector("#jobFormCard .card-heading h2").textContent = "Edit Job";
+      document.querySelector("#jobForm button[type=submit]").textContent = "Update Job";
+      document.getElementById("jobFormCard").style.display = "block";
+      document.getElementById("jobFormCard").scrollIntoView({ behavior: "smooth" });
+    }
+
+    document
+      .getElementById("showJobFormButton")
+      .addEventListener("click", () => {
+        editingJobId = null;
+        document.getElementById("jobForm").reset();
+        document.querySelector("#jobFormCard .card-heading h2").textContent = "Post a New Job";
+        document.querySelector("#jobForm button[type=submit]").textContent = "Publish Job";
+        document.getElementById("jobFormCard").style.display =
+          "block";
+
+        document
+          .getElementById("jobFormCard")
+          .scrollIntoView({
+            behavior: "smooth"
+          });
+      });
+
+    document
+      .getElementById("cancelJobButton")
+      .addEventListener("click", () => {
+        resetJobForm();
+      });
+
+    document
+      .getElementById("jobForm")
+      .addEventListener("submit", event => {
+        event.preventDefault();
+
+        const jobData = {
+          title: document.getElementById("jobTitle").value,
+          department: document.getElementById("jobDepartment").value,
+          location: document.getElementById("jobLocation").value,
+          type: document.getElementById("jobType").value,
+          duration: document.getElementById("jobDuration").value,
+          stipend: document.getElementById("jobStipend").value,
+          skills: document.getElementById("jobSkills").value,
+          description: document.getElementById("jobDescription").value
+        };
+
+        if (editingJobId !== null) {
+          const jobIndex = jobs.findIndex(item => item.id === editingJobId);
+
+          if (jobIndex !== -1) {
+            jobs[jobIndex] = {
+              ...jobs[jobIndex],
+              ...jobData
+            };
+          }
+
+          saveData();
+          renderAll();
+          resetJobForm();
+          showToast("Job updated successfully.");
+          return;
+        }
+
+        const newJob = {
+          id: Date.now(),
+          ...jobData,
+          applications: 0,
+          status: "Active"
+        };
+
+        jobs.unshift(newJob);
+        saveData();
+        renderAll();
+        resetJobForm();
+
+        showToast("Job posted successfully.");
+      });
+
+    document
+      .getElementById("companyProfileForm")
+      .addEventListener("submit", event => {
+        event.preventDefault();
+
+        companyProfile = {
+          name: document.getElementById("companyName").value,
+          email: document.getElementById("companyEmail").value,
+          website: document.getElementById("companyWebsite").value,
+          industry: document.getElementById("companyIndustry").value,
+          location: document.getElementById("companyLocation").value,
+          description: document.getElementById("companyDescription").value
+        };
+
+        saveData();
+        updateCompanyBranding();
+
+        showToast("Company profile updated.");
+      });
+
+    document
+      .getElementById("noticeForm")
+      .addEventListener("submit", event => {
+        event.preventDefault();
+
+        companyNotice.push({
+          title: document.getElementById("noticeTitle").value.trim(),
+          body: document.getElementById("noticeBody").value.trim(),
+          date: new Date().toLocaleString()
+        });
+
+        saveData();
+        showToast("Notice published on the website.");
+      });
+
+    document
+      .getElementById("clearNoticeButton")
+      .addEventListener("click", () => {
+        companyNotice = [];
+        localStorage.removeItem("companyNotice");
+        renderNoticeForm();
+        showToast("Company notice removed.");
+      });
+
+    document
+      .getElementById("clearMessagesButton")
+      .addEventListener("click", () => {
+        if (!confirm("Clear all contact messages?")) return;
+
+        messages = [];
+        localStorage.removeItem("talentBridgeContacts");
+        localStorage.setItem("companyMessages", JSON.stringify(messages));
+        renderMessages();
+        renderStats();
+        renderRecentActivity();
+        showToast("All contact messages cleared.");
+      });
+
+    function toggleJobStatus(id) {
+      const job = jobs.find(item => item.id === id);
+
+      if (!job) return;
+
+      job.status =
+        job.status === "Active" ? "Closed" : "Active";
+
+      saveData();
+      renderAll();
+
+      showToast("Job status updated.");
+    }
+
+    function deleteJob(id) {
+      const confirmed = confirm(
+        "Are you sure you want to delete this job?"
+      );
+
+      if (!confirmed) return;
+
+      jobs = jobs.filter(item => item.id !== id);
+
+      saveData();
+      renderAll();
+
+      showToast("Job deleted.");
+    }
+
+    function updateApplicationStatus(id, status) {
+      const application = applications.find(item => item.id === id);
+
+      if (!application) return;
+
+      application.status = status;
+
+      saveData();
+      renderAll();
+
+      showToast(`Application marked as ${status}.`);
+    }
+
+    function resolveMessage(id) {
+      const message = messages.find(item => item.id === id);
+
+      if (!message) return;
+
+      message.status = "Resolved";
+
+      saveData();
+      renderAll();
+
+      showToast("Message marked as resolved.");
+    }
+
+
+    function escapeHtml(value) { return String(value ?? "").replace(/[&<>"']/g, ch => ({ "&":"&amp;", "<":"&lt;", ">":"&gt;", '"':"&quot;", "'":"&#039;" }[ch])); }
+
+    function getStudentProfilesForMatching() {
+      const users = JSON.parse(localStorage.getItem("talentBridgeUsers") || "[]");
+      return users.filter(u => (u.role || "").toLowerCase() === "student").map(u => {
+        let profile = {};
+        try { profile = JSON.parse(localStorage.getItem("talentBridge_profile_" + u.id) || "{}"); } catch(e) {}
+        const skills = String(profile.skills || u.skills || "").split(/[,;|]/).map(x => x.trim()).filter(Boolean);
+        const resumeName = localStorage.getItem("talentBridge_resumeName_" + u.id) || "Not uploaded";
+        const resumeData = localStorage.getItem("talentBridge_resumeData_" + u.id) || "";
+        const resumeText = localStorage.getItem("talentBridge_resumeText_" + u.id) || "";
+        return { user:u, profile, skills, resumeName, resumeData, resumeText };
+      });
+    }
+
+    function renderResumeMatching() {
+      const jobSelect = document.getElementById("matchJobFilter");
+      const body = document.getElementById("resumeMatchTableBody");
+      if (!jobSelect || !body) return;
+      const oldJob = jobSelect.value;
+      jobSelect.innerHTML = '<option value="">Select a job</option>' + jobs.map(j => `<option value="${j.id}">${escapeHtml(j.title)}</option>`).join("");
+      if (jobs.some(j => String(j.id) === oldJob)) jobSelect.value = oldJob;
+      const selected = jobs.find(j => String(j.id) === jobSelect.value);
+      const college = document.getElementById("matchCollegeFilter").value;
+      const dept = document.getElementById("matchDepartmentFilter").value;
+      const min = Number(document.getElementById("matchMinimumScore").value || 0);
+      const summary = document.getElementById("matchJobSummary");
+      const allProfiles = getStudentProfilesForMatching();
+      const allApplications = JSON.parse(localStorage.getItem("companyApplications") || "[]");
+      if (!selected) { body.innerHTML = '<tr><td colspan="8" style="text-align:center;padding:28px;">Select a job to view resume matches.</td></tr>'; summary.textContent = ""; return; }
+      const required = String(selected.skills || "").split(/[,;|]/).map(x=>x.trim()).filter(Boolean);
+      summary.innerHTML = `<strong>${escapeHtml(selected.title)}</strong> · Required skills: ${escapeHtml(required.join(", ") || "Not specified")}`;
+      const applicantIds = new Set(allApplications.filter(a => String(a.jobId || "") === String(selected.id)).map(a => String(a.studentId || a.email || a.studentEmail || "").toLowerCase()));
+      const profiles = allProfiles.filter(x => {
+        const keys = [x.user.id, x.user.email, x.profile.emailAddress].filter(Boolean).map(v => String(v).toLowerCase());
+        return keys.some(k => applicantIds.has(k)) && (!college || x.profile.collegeName === college) && (!dept || x.profile.department === dept);
+      });
+      const rows = profiles.map(x => {
+        const application = allApplications.find(a => String(a.jobId || "") === String(selected.id) && (String(a.studentId || "") === String(x.user.id || "") || String(a.email || a.studentEmail || "").toLowerCase() === String(x.user.email || "").toLowerCase()));
+        const searchableResume = String(x.resumeText || "").toLowerCase();
+        const own = x.skills.map(v=>v.toLowerCase());
+        const matching = required.filter(r => {
+          const skill = r.toLowerCase();
+          return own.some(v => v === skill || v.includes(skill) || skill.includes(v)) ||
+            searchableResume.includes(skill) ||
+            (x.profile.course || "").toLowerCase().includes(skill) ||
+            (x.profile.department || "").toLowerCase().includes(skill);
+        });
+        const missing = required.filter(r => !matching.some(m=>m.toLowerCase()===r.toLowerCase()));
+        const score = required.length ? Math.round(matching.length / required.length * 100) : 0;
+        return {...x, application, resumeName: application?.resumeName || x.resumeName, resumeData: application?.resumeData || x.resumeData, resumeText: application?.resumeText || x.resumeText, matching, missing, score};
+      }).filter(x=>x.score>=min).sort((a,b)=>b.score-a.score);
+      body.innerHTML = rows.map(x => `<tr><td><strong>${escapeHtml(x.profile.fullName || x.user.name || "Unnamed Student")}</strong><br><small>${escapeHtml(x.profile.emailAddress || x.user.email || "")}</small></td><td>${escapeHtml(selected.title)}</td><td>${escapeHtml(x.profile.collegeName || "—")}</td><td>${escapeHtml(x.profile.department || "—")}</td><td><strong>${x.score}%</strong></td><td>${escapeHtml(x.matching.join(", ") || "None")}</td><td>${escapeHtml(x.missing.join(", ") || "None")}</td><td><span class="status-badge ${getStatusClass(x.application?.status || "Pending")}">${escapeHtml(x.application?.status || "Pending")}</span></td></tr>`).join("") || '<tr><td colspan="8" style="text-align:center;padding:28px;">No applicants found for this job.</td></tr>';
+      const colleges=[...new Set(allProfiles.filter(x => allApplications.some(a => String(a.jobId || "") === String(selected.id) && (String(a.studentId || "") === String(x.user.id || "") || String(a.email || a.studentEmail || "").toLowerCase() === String(x.user.email || "").toLowerCase()))).map(x=>x.profile.collegeName).filter(Boolean))].sort();
+      const departments=[...new Set(allProfiles.filter(x => allApplications.some(a => String(a.jobId || "") === String(selected.id) && (String(a.studentId || "") === String(x.user.id || "") || String(a.email || a.studentEmail || "").toLowerCase() === String(x.user.email || "").toLowerCase()))).map(x=>x.profile.department).filter(Boolean))].sort();
+      const fill=(id, vals, label)=>{const el=document.getElementById(id), old=el.value; el.innerHTML=`<option value="">${label}</option>`+vals.map(v=>`<option>${escapeHtml(v)}</option>`).join(""); if(vals.includes(old))el.value=old;};
+      fill("matchCollegeFilter",colleges,"All Colleges"); fill("matchDepartmentFilter",departments,"All Departments");
+    }
+
+
+    function viewStudentResume(studentId, applicationResumeData) {
+      const data = applicationResumeData || localStorage.getItem("talentBridge_resumeData_" + studentId);
+      if (!data) { alert("Resume is not available for this student."); return; }
+      const win = window.open();
+      if (!win) { alert("Please allow pop-ups to view the resume."); return; }
+      win.document.write(`<title>Student Resume</title><iframe src="${data}" style="width:100%;height:100vh;border:0"></iframe>`);
+      win.document.close();
+    }
+
+    function renderAcademicRecords() {
+      const records = JSON.parse(localStorage.getItem("talentBridgeAcademicRecords") || "[]");
+      const college = document.getElementById("adminCollegeFilter");
+      const department = document.getElementById("adminDepartmentFilter");
+      const year = document.getElementById("adminYearFilter");
+      const search = document.getElementById("adminStudentSearch");
+      const body = document.getElementById("adminAcademicTableBody");
+      if (!college || !body) return;
+
+      const clean = value => String(value ?? "").trim();
+      const normalized = value => clean(value).toLowerCase().replace(/\s+/g, " ");
+      const uniqueDisplay = key => {
+        const map = new Map();
+        records.forEach(r => {
+          const value = clean(r[key]);
+          if (value && !map.has(normalized(value))) map.set(normalized(value), value);
+        });
+        return [...map.values()].sort((a,b) => a.localeCompare(b));
+      };
+      const fill = (el, values, label) => {
+        const old = el.value;
+        el.innerHTML = `<option value="">${label}</option>` + values.map(v => `<option value="${escapeHtml(v)}">${escapeHtml(v)}</option>`).join("");
+        if (values.includes(old)) el.value = old;
+      };
+
+      // The college filter contains each college only once.
+      fill(college, uniqueDisplay("college"), "All Colleges");
+
+      // Departments and academic years depend on the selected college.
+      const collegeRecords = records.filter(r => !college.value || normalized(r.college) === normalized(college.value));
+      const departmentValues = [...new Map(collegeRecords.map(r => [normalized(r.department), clean(r.department)]).filter(([k,v]) => v)).values()].sort((a,b) => a.localeCompare(b));
+      const yearValues = [...new Map(collegeRecords.map(r => [normalized(r.academicYear), clean(r.academicYear)]).filter(([k,v]) => v)).values()].sort((a,b) => a.localeCompare(b));
+      fill(department, departmentValues, "All Departments");
+      fill(year, yearValues, "All Academic Years");
+
+      const filtered = records.filter(r =>
+        (!college.value || normalized(r.college) === normalized(college.value)) &&
+        (!department.value || normalized(r.department) === normalized(department.value)) &&
+        (!year.value || normalized(r.academicYear) === normalized(year.value)) &&
+        (!search.value || `${clean(r.studentName)} ${clean(r.studentEmail)}`.toLowerCase().includes(search.value.toLowerCase()))
+      );
+
+      // Keep the latest entry for each student + semester + subject.
+      const latestSubjects = new Map();
+      filtered.forEach(r => {
+        const identity = normalized(r.studentEmail) || normalized(r.studentName);
+        const subjectKey = [identity, normalized(r.college), normalized(r.department), normalized(r.academicYear), normalized(r.semester), normalized(r.subject)].join("|");
+        const old = latestSubjects.get(subjectKey);
+        if (!old || String(r.updatedAt || r.id || "") >= String(old.updatedAt || old.id || "")) latestSubjects.set(subjectKey, r);
+      });
+
+      // Show one row per student. Their college is displayed once in that student's row,
+      // while the college filter itself contains each college only once.
+      const studentGroups = {};
+      [...latestSubjects.values()].forEach(r => {
+        const identity = normalized(r.studentEmail) || normalized(r.studentName) || `record-${r.id}`;
+        (studentGroups[identity] ||= []).push(r);
+      });
+
+      body.innerHTML = Object.values(studentGroups).sort((a,b) => clean(a[0].studentName).localeCompare(clean(b[0].studentName))).map(rows => {
+        const first = rows[0];
+        const departments = [...new Set(rows.map(r => clean(r.department)).filter(Boolean))].sort();
+        const years = [...new Set(rows.map(r => clean(r.academicYear)).filter(Boolean))].sort();
+        const semesters = new Set(rows.map(r => [normalized(r.studentEmail) || normalized(r.studentName), clean(r.semester)].join("|")).filter(v => v !== "|"));
+        const subjects = new Set(rows.map(r => [normalized(r.studentEmail) || normalized(r.studentName), clean(r.semester), clean(r.subject)].join("|")).filter(v => v !== "||"));
+        const total = rows.reduce((a, r) => a + Number(r.totalMarks || 0), 0);
+        const obtained = rows.reduce((a, r) => a + Number(r.marksObtained || 0), 0);
+        const pct = total ? (obtained / total * 100).toFixed(1) : "0.0";
+        const grade = pct >= 90 ? "A+" : pct >= 80 ? "A" : pct >= 70 ? "B+" : pct >= 60 ? "B" : pct >= 50 ? "C" : pct >= 40 ? "D" : "F";
+        return `<tr><td><strong>${escapeHtml(first.studentName || "Unnamed Student")}</strong><br><small>${escapeHtml(first.studentEmail || "")}</small></td><td>${escapeHtml(first.college || "Unknown College")}</td><td>${escapeHtml(departments.join(", ") || "—")}</td><td>${escapeHtml(years.join(", ") || "—")}</td><td><strong>${pct}%</strong> · Grade ${grade}</td><td>${semesters.size || "—"}</td><td>${subjects.size || "—"}</td></tr>`;
+      }).join("") || `<tr><td colspan="7" style="text-align:center;padding:28px;">No academic records match the selected filters.</td></tr>`;
+    }
+    ["adminCollegeFilter","adminDepartmentFilter","adminYearFilter","adminStudentSearch"].forEach(id => { const el=document.getElementById(id); if(el) el.addEventListener("input",renderAcademicRecords); });
+    ["matchJobFilter","matchCollegeFilter","matchDepartmentFilter","matchMinimumScore"].forEach(id => { const el=document.getElementById(id); if(el) { el.addEventListener("input",renderResumeMatching); el.addEventListener("change",renderResumeMatching); } });
+
+    function renderAll() {
+      renderStats();
+      renderRecentActivity();
+      renderLatestJobs();
+      renderJobs();
+      renderApplications();
+      renderMessages();
+      renderNoticeForm();
+      renderCompanyProfile();
+      renderAcademicRecords();
+      renderResumeMatching();
+    }
+
+    document
+      .getElementById("logoutButton")
+      .addEventListener("click", event => {
+        const confirmed = confirm("Do you want to logout?");
+
+        if (!confirmed) {
+          event.preventDefault();
+        }
+      });
+
+    window.addEventListener("storage", event => {
+      if (event.key === "companyNotice") {
+        companyNotice = normalizeNotices(JSON.parse(localStorage.getItem("companyNotice") || "null"));
+        renderNoticeForm();
+        return;
+      }
+
+      if (event.key === "talentBridgeContacts" || event.key === "companyMessages") {
+        syncContactMessages();
+        return;
+      }
+
+      if (event.key !== "companyJobs" && event.key !== "companyApplications") return;
+
+      jobs = JSON.parse(localStorage.getItem("companyJobs") || "[]");
+      applications = removeSeededEntries(
+        JSON.parse(localStorage.getItem("companyApplications") || "[]")
+      );
+      renderAll();
+    });
+
+    renderAll();
+  </script>
+
+</body>
+</html>

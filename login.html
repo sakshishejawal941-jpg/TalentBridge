@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sign in | TalentBridge by Saeum Innovations</title>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Manrope:wght@600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body class="auth-page">
+    <main class="auth-shell">
+        <section class="auth-intro">
+            <a class="auth-brand" href="index.html">
+                <span>TB</span>
+                <strong>TalentBridge</strong>
+                <small>by Saeum Innovations</small>
+            </a>
+
+            <div class="intro-copy">
+                <span class="eyebrow">Talent intelligence, connected</span>
+                <h1>Make every hiring decision more informed.</h1>
+                <p>Access verified student profiles, college insights and AI-powered talent discovery in one place.</p>
+                <div class="intro-proof"><span>✓</span> Trusted data from Maharashtra's colleges</div>
+            </div>
+        </section>
+        <section class="auth-panel" aria-labelledby="login-title">
+            <a class="mobile-back" href="index.html">← TalentBridge</a>
+            <div class="auth-heading">
+                <span class="eyebrow">Welcome back</span>
+                <h2 id="login-title">Sign in to your workspace</h2>
+                <p>Use your registered email to continue.</p>
+            </div>
+            <form id="loginForm" class="auth-form">
+                <label for="email">Email address</label>
+                <input type="email" id="email" placeholder="you@company.com" autocomplete="email" required>
+                <div class="label-row"><label for="password">Password</label><a href="#">Forgot password?</a></div>
+                <input type="password" id="password" placeholder="Enter your password" autocomplete="current-password" required>
+                <label class="check-row"><input type="checkbox"> <span>Keep me signed in</span></label>
+                <button type="submit" class="auth-submit">Sign in <span>→</span></button>
+            </form>
+            <p class="auth-switch">New to TalentBridge? <a href="register.html">Create an account</a></p>
+            <a class="back-home" href="index.html">← Back to home</a>
+        </section>
+    </main>
+    <script>
+    document.getElementById("loginForm").addEventListener("submit", function (event) {
+        event.preventDefault();
+
+        const email = document
+            .getElementById("email")
+            .value
+            .trim()
+            .toLowerCase();
+
+        const password = document.getElementById("password").value;
+
+        let users = [];
+
+        try {
+            users = JSON.parse(
+                localStorage.getItem("talentBridgeUsers") || "[]"
+            );
+
+            if (!Array.isArray(users)) {
+                users = [];
+            }
+        } catch (error) {
+            users = [];
+        }
+
+        const user = users.find(savedUser =>
+            savedUser.email === email &&
+            savedUser.password === password
+        );
+
+        if (!user) {
+            alert(
+                "This email is not registered, or the password is incorrect. Please register first."
+            );
+            return;
+        }
+
+        localStorage.setItem(
+            "talentBridgeCurrentUser",
+            JSON.stringify(user)
+        );
+
+        const normalizedRole = String(user.role || "")
+            .trim()
+            .toLowerCase()
+            .replace(/[\s/_-]+/g, "");
+
+        if (normalizedRole === "company" || normalizedRole === "recruiter" || normalizedRole === "companyrecruiter" ||
+    normalizedRole === "admin") {
+            window.location.href = "company-dashboard.html";
+        } else if (normalizedRole === "teacher" || normalizedRole === "faculty" || normalizedRole === "collegerepresentative") {
+            window.location.href = "teacher-dashboard.html";
+        } else {
+            window.location.href = "student-dashboard.html";
+        }
+    
+    });
+</script>
+</body>
+</html>
