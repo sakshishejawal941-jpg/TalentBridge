@@ -46,7 +46,6 @@
                 <select id="role" required>
                     <option value="student">Student</option>
                     <option value="teacher">Teacher / college representative</option>
-                    <option value="company">Company / Admin</option>
                 </select>
 
                 <div id="collegeField">
@@ -120,6 +119,11 @@
 
         const role = roleSelect.value;
         const college = collegeInput.value.trim();
+
+        if (role === "company") {
+            alert("Company recruiter accounts are created by TalentBridge administration.");
+            return;
+        }
 
         if ((role === "student" || role === "teacher") && !college) {
             collegeInput.setCustomValidity("Please enter your college name.");
