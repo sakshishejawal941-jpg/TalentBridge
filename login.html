@@ -54,6 +54,27 @@
 
         const password = document.getElementById("password").value;
 
+        // Fixed Company/Admin recruiter login
+        const RECRUITER_EMAIL = "sakshishejawal941@gmail.com";
+        const RECRUITER_PASSWORD = "sakshi941";
+
+        if (email === RECRUITER_EMAIL && password === RECRUITER_PASSWORD) {
+            const recruiterUser = {
+                id: "fixed-recruiter",
+                name: "TalentBridge Recruiter",
+                email: RECRUITER_EMAIL,
+                role: "company"
+            };
+
+            localStorage.setItem(
+                "talentBridgeCurrentUser",
+                JSON.stringify(recruiterUser)
+            );
+
+            window.location.href = "company-dashboard.html";
+            return;
+        }
+
         let users = [];
 
         try {
