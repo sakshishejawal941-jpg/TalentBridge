@@ -1306,6 +1306,19 @@
   <div class="toast-message" id="toastMessage"></div>
 
   <script>
+    // Allow access only to the fixed Company/Admin recruiter
+    const currentUser = JSON.parse(
+      localStorage.getItem("talentBridgeCurrentUser") || "null"
+    );
+
+    if (
+      !currentUser ||
+      currentUser.id !== "fixed-recruiter" ||
+      currentUser.role !== "company"
+    ) {
+      window.location.href = "login.html";
+    }
+
     const defaultJobs = [
       {
         id: 1,
